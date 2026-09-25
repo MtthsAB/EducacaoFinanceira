@@ -3,7 +3,7 @@
    funcionar sem internet. Ao publicar uma versão nova, troque CACHE para
    pq-v2, pq-v3... para o navegador baixar os arquivos atualizados. */
 
-const CACHE = 'pq-v1';
+const CACHE = 'pq-v2';
 
 const ASSETS = [
   './',
@@ -17,8 +17,10 @@ const ASSETS = [
   './assets/fonts/nunito-600.woff2',
   './assets/fonts/nunito-800.woff2',
   './assets/fonts/nunito-900.woff2',
-  './assets/emoji/agua.svg',
   './assets/emoji/aplausos.svg',
+  './assets/emoji/bicicleta.svg',
+  './assets/emoji/bola.svg',
+  './assets/emoji/bone.svg',
   './assets/emoji/brinquedo.svg',
   './assets/emoji/casa.svg',
   './assets/emoji/casaco.svg',
@@ -29,14 +31,21 @@ const ASSETS = [
   './assets/emoji/escova-dentes.svg',
   './assets/emoji/estrela.svg',
   './assets/emoji/faiscas.svg',
-  './assets/emoji/fone.svg',
+  './assets/emoji/guarda-chuva.svg',
   './assets/emoji/impressora.svg',
-  './assets/emoji/interrogacao.svg',
-  './assets/emoji/mao-toque.svg',
+  './assets/emoji/lapis.svg',
+  './assets/emoji/meias.svg',
+  './assets/emoji/maca.svg',
+  './assets/emoji/mochila.svg',
+  './assets/emoji/pao.svg',
   './assets/emoji/pensando.svg',
+  './assets/emoji/pipoca.svg',
   './assets/emoji/recomecar.svg',
+  './assets/emoji/refrigerante.svg',
   './assets/emoji/remedio.svg',
+  './assets/emoji/sorvete.svg',
   './assets/emoji/tenis.svg',
+  './assets/emoji/uniforme.svg',
   './assets/emoji/videogame.svg'
 ];
 

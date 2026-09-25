@@ -9,23 +9,35 @@
   const EMOJI = './assets/emoji/';
 
   // f = arquivo em assets/emoji, n = legenda, t = lado correto
+  // coisas que a criança vê alguém comprar; cada rodada sorteia ROUND/2 de cada lado
   const ALL = [
-    {f:'comida',        n:'Comida',            t:'p'},
-    {f:'agua',          n:'Água',              t:'p'},
-    {f:'casa',          n:'Casa',              t:'p'},
-    {f:'remedio',       n:'Remédio',           t:'p'},
-    {f:'casaco',        n:'Casaco no frio',    t:'p'},
-    {f:'escova-dentes', n:'Escova de dentes',  t:'p'},
-    {f:'videogame',     n:'Videogame',         t:'q'},
-    {f:'tenis',         n:'Tênis novo',        t:'q'},
-    {f:'celular',       n:'Celular novo',      t:'q'},
-    {f:'doce',          n:'Doce',              t:'q'},
-    {f:'brinquedo',     n:'Brinquedo',         t:'q'},
-    {f:'fone',          n:'Fone novo',         t:'q'}
+    {f:'comida',          n:'Arroz e feijão',    t:'p'},
+    {f:'remedio',         n:'Remédio',           t:'p'},
+    {f:'casaco',          n:'Casaco no frio',    t:'p'},
+    {f:'escova-dentes',   n:'Escova de dentes',  t:'p'},
+    {f:'mochila',         n:'Mochila da escola', t:'p'},
+    {f:'meias',           n:'Meias',             t:'p'},
+    {f:'maca',            n:'Maçã',              t:'p'},
+    {f:'pao',             n:'Pão',               t:'p'},
+    {f:'lapis',           n:'Lápis',             t:'p'},
+    {f:'guarda-chuva',    n:'Guarda-chuva',      t:'p'},
+    {f:'uniforme',        n:'Uniforme da escola', t:'p'},
+    {f:'refrigerante',    n:'Refrigerante',      t:'q'},
+    {f:'doce',            n:'Pirulito',          t:'q'},
+    {f:'videogame',       n:'Videogame',         t:'q'},
+    {f:'tenis',           n:'Tênis da moda',     t:'q'},
+    {f:'celular',         n:'Celular novo',      t:'q'},
+    {f:'brinquedo',       n:'Brinquedo',         t:'q'},
+    {f:'sorvete',         n:'Sorvete',           t:'q'},
+    {f:'bola',            n:'Bola nova',         t:'q'},
+    {f:'bicicleta',       n:'Bicicleta nova',    t:'q'},
+    {f:'pipoca',          n:'Pipoca',            t:'q'},
+    {f:'bone',            n:'Boné',              t:'q'}
   ];
+  const ROUND = 6; // cartas por rodada, metade de cada lado
 
   // deixa as figuras prontas antes da primeira carta, para não piscar
-  ALL.concat([{f:'interrogacao'},{f:'faiscas'},{f:'estrela'}]).forEach(it => {
+  ALL.concat([{f:'faiscas'},{f:'estrela'}]).forEach(it => {
     const img = new Image(); img.src = EMOJI + it.f + '.svg';
   });
 
@@ -37,13 +49,18 @@
     return img;
   }
 
-  // embaralha sem deixar 3 cartas seguidas do mesmo lado
+  function mix(list){
+    const a = list.slice();
+    for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; }
+    return a;
+  }
+
+  // sorteia as cartas da rodada e embaralha sem deixar 3 seguidas do mesmo lado
   function shuffle(){
+    const side = t => mix(ALL.filter(x => x.t === t)).slice(0, ROUND/2);
     let a;
-    do {
-      a = ALL.slice();
-      for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; }
-    } while (a.some((x,i) => i > 1 && x.t === a[i-1].t && x.t === a[i-2].t));
+    do a = mix(side('p').concat(side('q')));
+    while (a.some((x,i) => i > 1 && x.t === a[i-1].t && x.t === a[i-2].t));
     return a;
   }
 
@@ -65,38 +82,18 @@
   function goHome(){ phase = 'start'; show('start'); }
 
   function dealCard(){
-    zoneP.classList.remove('hit','ready'); zoneQ.classList.remove('hit','ready');
+    const it = items[idx];
+    zoneP.classList.remove('hit'); zoneQ.classList.remove('hit');
+    zoneP.classList.add('ready'); zoneQ.classList.add('ready');
     $('#next').classList.remove('show');
-    $('#arrows').classList.add('hide');
+    $('#arrows').classList.remove('hide');
     $$('#progress i').forEach((d,i) => d.classList.toggle('now', i === idx));
     card.style.transition = 'none'; card.style.transform = ''; card.style.opacity = '1'; card.style.animation = '';
     card.style.display = 'flex';
-    card.className = 'card back';
-    setCardFace('interrogacao', 'Carta virada'); $('#cardName').textContent = '.';
+    card.className = 'card';
+    setCardFace(it.f, it.n); $('#cardName').textContent = it.n;
     void card.offsetWidth; card.classList.add('enter');
-    phase = 'hidden';
-  }
-
-  // virar a carta: dá tempo do intérprete preparar a turma
-  function flip(){
-    if (phase !== 'hidden') return;
-    phase = 'flipping';
-    const it = items[idx];
-    card.classList.remove('enter');
-    card.style.transition = 'transform .22s ease-in';
-    card.style.transform = 'scaleX(0)';
-    setTimeout(() => {
-      card.className = 'card front';
-      setCardFace(it.f, it.n); $('#cardName').textContent = it.n;
-      card.style.transition = 'transform .22s ease-out';
-      card.style.transform = 'scaleX(1)';
-      setTimeout(() => {
-        card.style.transform = '';
-        $('#arrows').classList.remove('hide');
-        zoneP.classList.add('ready'); zoneQ.classList.add('ready');
-        phase = 'ask';
-      }, 230);
-    }, 230);
+    phase = 'ask';
   }
 
   function sparkle(zone){
@@ -191,10 +188,9 @@
   $('#btnQ').addEventListener('click', () => choose('q'));
   $('#next').addEventListener('click', next);
 
-  // toque vira a carta; depois de virada, dá para arrastar
+  // arrastar a carta para um dos lados
   let drag = null, moved = false;
   card.addEventListener('pointerdown', e => {
-    if (phase === 'hidden'){ flip(); return; }
     if (phase !== 'ask') return;
     drag = {x:e.clientX, y:e.clientY}; moved = false; card.setPointerCapture(e.pointerId);
     card.style.transition = 'none';
@@ -221,8 +217,7 @@
     if (k === 'r' || k === 'R'){ startGame(); return; }
     if (sp){
       e.preventDefault();
-      if (phase === 'hidden') flip();
-      else if (phase === 'placed') next();
+      if (phase === 'placed') next();
       else if (phase === 'end') startGame();
     }
     if (phase === 'ask' && k === 'ArrowLeft'){ e.preventDefault(); choose('p'); }

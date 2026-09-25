@@ -46,7 +46,7 @@ if exist "node_modules\serve\package.json" (
 rem ---- 3. Sobe o servidor ----
 rem O serve.js procura uma porta livre, abre o navegador sozinho depois que
 rem ja esta ouvindo, e fica rodando ate voce apertar Ctrl+C.
-node serve.js site %PORT%
+node serve.js . %PORT%
 set "RC=%errorlevel%"
 
 echo.
@@ -54,7 +54,7 @@ if not "%RC%"=="0" (
   echo  [ERRO] O servidor terminou com codigo %RC%.
   echo.
   echo  Tente rodar o comando abaixo nesta pasta para ver a mensagem completa:
-  echo      node serve.js site %PORT%
+  echo      node serve.js . %PORT%
 ) else (
   echo  Servidor encerrado.
 )

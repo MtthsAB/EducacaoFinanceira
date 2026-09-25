@@ -1,7 +1,7 @@
 # Créditos e licenças
 
 Este site é estático e não faz nenhuma requisição externa em tempo de execução.
-Todos os arquivos abaixo estão incluídos na pasta `site/`.
+Todos os arquivos abaixo estão incluídos neste repositório.
 
 ## Figuras (emojis) — Twemoji
 
@@ -21,23 +21,32 @@ Mapa de arquivos (nome local ← codepoint):
 | `estrela.svg` | ⭐ | `2b50` | lado QUERO (tela inicial, zona, botão, plaquinha) e faíscas |
 | `pensando.svg` | 🤔 | `1f914` | tela inicial, entre os dois lados |
 | `impressora.svg` | 🖨️ | `1f5a8` | botão "Plaquinhas" |
-| `casa.svg` | 🏠 | `1f3e0` | botão Início e carta "Casa" |
+| `casa.svg` | 🏠 | `1f3e0` | botão Início |
 | `recomecar.svg` | 🔄 | `1f504` | botão Recomeçar e botão Jogar de novo |
-| `interrogacao.svg` | ❓ | `2753` | carta virada |
-| `mao-toque.svg` | 👆 | `1f446` | dica de toque na carta |
 | `aplausos.svg` | 👏 | `1f44f` | tela final |
 | `faiscas.svg` | ✨ | `2728` | faíscas do acerto |
-| `comida.svg` | 🍚 | `1f35a` | carta "Comida" |
-| `agua.svg` | 💧 | `1f4a7` | carta "Água" |
+| `comida.svg` | 🍚 | `1f35a` | carta "Arroz e feijão" |
+| `mochila.svg` | 🎒 | `1f392` | carta "Mochila da escola" |
 | `remedio.svg` | 💊 | `1f48a` | carta "Remédio" |
 | `casaco.svg` | 🧥 | `1f9e5` | carta "Casaco no frio" |
 | `escova-dentes.svg` | 🪥 | `1faa5` | carta "Escova de dentes" |
 | `videogame.svg` | 🎮 | `1f3ae` | carta "Videogame" |
-| `tenis.svg` | 👟 | `1f45f` | carta "Tênis novo" |
+| `tenis.svg` | 👟 | `1f45f` | carta "Tênis da moda" |
 | `celular.svg` | 📱 | `1f4f1` | carta "Celular novo" |
-| `doce.svg` | 🍭 | `1f36d` | carta "Doce" |
+| `doce.svg` | 🍭 | `1f36d` | carta "Pirulito" |
 | `brinquedo.svg` | 🧸 | `1f9f8` | carta "Brinquedo" |
-| `fone.svg` | 🎧 | `1f3a7` | carta "Fone novo" |
+| `refrigerante.svg` | 🥤 | `1f964` | carta "Refrigerante" |
+| `meias.svg` | 🧦 | `1f9e6` | carta "Meias" |
+| `maca.svg` | 🍎 | `1f34e` | carta "Maçã" |
+| `pao.svg` | 🍞 | `1f35e` | carta "Pão" |
+| `lapis.svg` | ✏️ | `270f` | carta "Lápis" |
+| `guarda-chuva.svg` | ☔ | `2614` | carta "Guarda-chuva" |
+| `uniforme.svg` | 👕 | `1f455` | carta "Uniforme da escola" |
+| `sorvete.svg` | 🍦 | `1f366` | carta "Sorvete" |
+| `bola.svg` | ⚽ | `26bd` | carta "Bola nova" |
+| `bicicleta.svg` | 🚲 | `1f6b2` | carta "Bicicleta nova" |
+| `pipoca.svg` | 🍿 | `1f37f` | carta "Pipoca" |
+| `bone.svg` | 🧢 | `1f9e2` | carta "Boné" |
 
 Os ícones do aplicativo (`icons/favicon.svg`, `icons/icon-192.png`, `icons/icon-512.png`)
 são obras derivadas do coração ❤️ do Twemoji, portanto também **CC-BY 4.0**.

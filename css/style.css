@@ -48,7 +48,7 @@
 *,*::before,*::after{box-sizing:border-box}
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
 body{
-  height:100%;margin:0;background:var(--bg);color:var(--ink);
+  height:100%;height:100dvh;margin:0;background:var(--bg);color:var(--ink);
   font-family:"Nunito",ui-rounded,"Segoe UI",system-ui,sans-serif;font-weight:800;
   overflow:hidden;-webkit-user-select:none;user-select:none;touch-action:manipulation;
 }
@@ -63,7 +63,7 @@ button:focus-visible{outline:5px solid var(--gold);outline-offset:4px}
 .screen.active{display:flex}
 
 /* início */
-#start{align-items:center;justify-content:center;gap:4vh;padding:20px;text-align:center}
+#start{align-items:center;justify-content:safe center;overflow-y:auto;gap:4vh;padding:20px;text-align:center}
 .hero{display:flex;align-items:center;gap:4vw}
 .hero .side{display:flex;flex-direction:column;align-items:center;gap:1.5vh;padding:4vh 4vw;border-radius:44px}
 .hero .side.p{background:var(--preciso-soft);color:var(--preciso)}
@@ -127,14 +127,10 @@ button:focus-visible{outline:5px solid var(--gold);outline-offset:4px}
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2vh;
   touch-action:none;position:relative;z-index:5;transition:transform .22s ease-in;
 }
-.card.back{background:var(--gold);cursor:pointer}
-.card.back .cap{visibility:hidden}
-.card.front{cursor:grab}
+.card{cursor:grab}
 .card.enter{animation:enter .45s ease-out}
 .card .big{font-size:clamp(90px,19vh,220px)}
-.card .cap{font-size:clamp(20px,3.4vh,34px);color:var(--muted)}
-.tap-hint{position:absolute;bottom:4%;font-size:clamp(34px,5vh,54px);animation:bob 1.6s ease-in-out infinite}
-.card.front .tap-hint{display:none}
+.card .cap{font-size:clamp(20px,3.4vh,34px);color:var(--muted);text-align:center;line-height:1.1;padding:0 8px}
 .arrows{display:flex;gap:3vw}
 .arrow{width:110px;height:110px;border-radius:50%;font-size:56px;display:grid;place-items:center;box-shadow:var(--shadow);color:#fff}
 .arrow.p{background:var(--preciso)}
@@ -151,7 +147,6 @@ button:focus-visible{outline:5px solid var(--gold);outline-offset:4px}
 
 @keyframes pop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
 @keyframes enter{0%{transform:translateY(-30px) scale(.85);opacity:0}100%{transform:none;opacity:1}}
-@keyframes bob{50%{transform:translateY(-10px)}}
 @keyframes breathe{50%{transform:scale(1.015)}}
 @keyframes nudgeL{50%{transform:translateX(-50px) rotate(-4deg)}}
 @keyframes nudgeR{50%{transform:translateX(50px) rotate(4deg)}}
@@ -174,9 +169,58 @@ button:focus-visible{outline:5px solid var(--gold);outline-offset:4px}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
   .spark{display:none}
 }
-@media (max-width:760px){
-  body{overflow:auto}
-  .hero{flex-direction:column}
-  .pq{grid-template-columns:1fr 1fr;grid-template-areas:"c c" "p q"}
-  .pq .center{grid-area:c}.zone.p{grid-area:p}.zone.q{grid-area:q}
+/* teclado não existe no celular */
+@media (hover:none){ .keys{display:none} }
+
+/* celular deitado / telas baixas */
+@media (max-height:500px){
+  .top{padding:6px 14px;gap:10px}
+  .round-btn{width:48px;height:48px;font-size:24px}
+  .progress{gap:6px}.progress i{width:12px;height:12px}
+  .pq{padding:0 2vw 2vh}
+  .zone{border-radius:24px;padding:2vh 1vw}
+  .check{width:48px;height:48px;font-size:30px;top:-10px;right:-6px}
+  .card{width:min(100%,40vh);border-radius:24px}
+  .center{gap:2vh}
+  .arrow{width:60px;height:60px;font-size:30px}
+  .next{width:80px;height:80px;font-size:40px}
+  .again{height:64px;font-size:34px}
+  .play-btn{width:90px;height:90px;font-size:44px}
+  .hero .side{padding:2vh 3vw;border-radius:28px}
+  #start{gap:3vh}
+}
+
+/* celular em pé */
+@media (max-width:760px) and (orientation:portrait){
+  #start{gap:3vh}
+  .hero{gap:3vw}
+  .hero .side{padding:3vh 5vw;border-radius:28px}
+  .hero .side .emoji{font-size:clamp(60px,20vw,110px)}
+  .hero .side .nm{font-size:clamp(18px,6vw,30px)}
+  .hero .or{font-size:clamp(32px,10vw,56px)}
+  .play-btn{width:96px;height:96px;font-size:48px}
+  .print-btn{height:56px;padding:0 18px;font-size:18px}
+  .print-btn .emoji{font-size:26px}
+
+  .top{grid-template-columns:auto 1fr;grid-template-areas:"l r" "pr pr";padding:10px 14px;gap:10px}
+  .top .left{grid-area:l}.top .right{grid-area:r}.progress{grid-area:pr;gap:6px}
+  .top .grp{gap:10px}
+  .round-btn{width:52px;height:52px;font-size:26px}
+  .progress i{width:14px;height:14px}
+
+  .pq{grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);grid-template-areas:"c c" "p q";gap:12px;padding:0 12px 12px}
+  .pq .center{grid-area:c;gap:12px}.zone.p{grid-area:p}.zone.q{grid-area:q}
+  .card{width:min(62vw,30dvh);border-radius:28px;gap:1vh}
+  .card .big{font-size:min(28vw,15dvh)}
+  .card .cap{font-size:clamp(16px,4.5vw,22px)}
+  .arrows{gap:40px}
+  .arrow{width:64px;height:64px;font-size:32px}
+  .next{width:88px;height:88px;font-size:44px}
+  .endbox .big{font-size:min(36vw,20dvh)}
+  .again{height:72px;font-size:38px}
+  .zone{border-radius:24px;border-width:4px;padding:10px 4px;gap:6px}
+  .zone .ic{font-size:min(12vw,6dvh)}
+  .zone .nm{font-size:clamp(16px,5vw,24px)}
+  .pile{gap:4px;font-size:min(9vw,4.5dvh)}
+  .check{width:44px;height:44px;font-size:28px;top:-10px;right:-4px}
 }

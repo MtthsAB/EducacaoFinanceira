@@ -13,7 +13,7 @@ const { spawn } = require('child_process');
 const args = process.argv.slice(2).filter(a => a !== '--no-open');
 const NO_OPEN = process.argv.includes('--no-open');
 
-const ROOT = path.resolve(args[0] || path.join(__dirname, 'site'));
+const ROOT = path.resolve(args[0] || __dirname);
 const FIRST_PORT = Number(args[1]) || 8080;
 const MAX_TRIES = 12;
 
