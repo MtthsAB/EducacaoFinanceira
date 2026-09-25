@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Preciso ou quero?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E6F2FB; --ink:#17304F; --muted:#4A6280; --card:#FFFFFF;
+  --preciso:#1E8E4E; --preciso-soft:#D3EFDD;
+  --quero:#6D3FC8; --quero-soft:#E6DDFA;
+  --gold:#E9A91C; --gold-soft:#FFF1C9;
+  --shadow:0 8px 0 rgba(23,48,79,.12);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#10223A; --ink:#EEF4FB; --muted:#A9BCD3; --card:#1D3558;
+    --preciso:#3CC678; --preciso-soft:#173F2C;
+    --quero:#A27CF0; --quero-soft:#2E2352;
+    --gold:#F4BE3E; --gold-soft:#3D3217;
+    --shadow:0 8px 0 rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10223A; --ink:#EEF4FB; --muted:#A9BCD3; --card:#1D3558;
+  --preciso:#3CC678; --preciso-soft:#173F2C;
+  --quero:#A27CF0; --quero-soft:#2E2352;
+  --gold:#F4BE3E; --gold-soft:#3D3217;
+  --shadow:0 8px 0 rgba(0,0,0,.3);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  height:100%;margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Nunito",ui-rounded,"Segoe UI",system-ui,sans-serif;font-weight:800;
+  overflow:hidden;-webkit-user-select:none;user-select:none;touch-action:manipulation;
+}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible{outline:5px solid var(--gold);outline-offset:4px}
+.emoji{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;line-height:1}
+.screen{display:none;height:100%;flex-direction:column}
+.screen.active{display:flex}
+
+/* início */
+#start{align-items:center;justify-content:center;gap:4vh;padding:20px;text-align:center}
+.hero{display:flex;align-items:center;gap:4vw}
+.hero .side{display:flex;flex-direction:column;align-items:center;gap:1.5vh;padding:4vh 4vw;border-radius:44px}
+.hero .side.p{background:var(--preciso-soft);color:var(--preciso)}
+.hero .side.q{background:var(--quero-soft);color:var(--quero)}
+.hero .side .emoji{font-size:clamp(90px,17vh,190px)}
+.hero .side .nm{font-size:clamp(28px,4.6vh,52px);font-weight:900}
+.hero .or{font-size:clamp(40px,7vh,80px)}
+.play-btn{
+  width:clamp(120px,18vh,180px);height:clamp(120px,18vh,180px);border-radius:50%;background:var(--gold);color:#fff;
+  font-size:clamp(60px,9vh,90px);display:grid;place-items:center;box-shadow:var(--shadow);padding-left:10px;
+}
+.start-row{display:flex;align-items:center;gap:3vw}
+.print-btn{height:72px;padding:0 26px;border-radius:36px;background:var(--card);box-shadow:var(--shadow);font-size:22px;display:flex;align-items:center;gap:10px}
+.print-btn .emoji{font-size:34px}
+.keys{color:var(--muted);font-size:15px;font-weight:600;max-width:90vw}
+.keys kbd{background:var(--card);border-radius:6px;padding:2px 8px;font-family:inherit}
+
+/* barra superior */
+.top{display:flex;align-items:center;gap:16px;padding:14px 20px}
+.round-btn{width:72px;height:72px;border-radius:50%;background:var(--card);box-shadow:var(--shadow);font-size:36px;display:grid;place-items:center;flex:none}
+.top .spacer{flex:1}
+.progress{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.progress i{width:20px;height:20px;border-radius:50%;background:var(--card);box-shadow:inset 0 0 0 3px var(--muted);transition:background .3s}
+.progress i.now{box-shadow:inset 0 0 0 4px var(--gold);transform:scale(1.25)}
+.progress i.p{background:var(--preciso);box-shadow:none}
+.progress i.q{background:var(--quero);box-shadow:none}
+
+/* jogo */
+.pq{flex:1;display:grid;grid-template-columns:1fr minmax(0,1.25fr) 1fr;gap:2.5vw;padding:0 2.5vw 3vh;min-height:0}
+.zone{
+  border-radius:40px;display:flex;flex-direction:column;align-items:center;
+  padding:3vh 1vw;gap:1.5vh;position:relative;border:6px solid transparent;
+  transition:border-color .3s;min-height:0;
+}
+.zone.p{background:var(--preciso-soft);color:var(--preciso)}
+.zone.q{background:var(--quero-soft);color:var(--quero)}
+.zone .ic{font-size:clamp(60px,11vh,120px)}
+.zone .nm{font-size:clamp(26px,4.4vh,48px);font-weight:900}
+.zone.hit.p{border-color:var(--preciso)}
+.zone.hit.q{border-color:var(--quero)}
+.zone.ready{animation:breathe 2.4s ease-in-out infinite}
+.pile{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;font-size:clamp(34px,6.4vh,62px);align-content:start;justify-items:center}
+.pile span{animation:pop .4s ease-out}
+.check{
+  position:absolute;top:-22px;right:-14px;width:84px;height:84px;border-radius:50%;
+  display:none;place-items:center;font-size:52px;color:#fff;box-shadow:var(--shadow);
+}
+.zone.p .check{background:var(--preciso)}
+.zone.q .check{background:var(--quero)}
+.zone.hit .check{display:grid;animation:pop .35s ease-out}
+
+.center{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3vh;min-height:0;position:relative}
+.card{
+  width:min(100%,46vh);aspect-ratio:3/4;background:var(--card);border-radius:44px;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2vh;
+  touch-action:none;position:relative;z-index:5;transition:transform .22s ease-in;
+}
+.card.back{background:var(--gold);cursor:pointer}
+.card.back .cap{visibility:hidden}
+.card.front{cursor:grab}
+.card.enter{animation:enter .45s ease-out}
+.card .big{font-size:clamp(90px,19vh,220px)}
+.card .cap{font-size:clamp(20px,3.4vh,34px);color:var(--muted)}
+.tap-hint{position:absolute;bottom:4%;font-size:clamp(34px,5vh,54px);animation:bob 1.6s ease-in-out infinite}
+.card.front .tap-hint{display:none}
+.arrows{display:flex;gap:3vw}
+.arrow{width:110px;height:110px;border-radius:50%;font-size:56px;display:grid;place-items:center;box-shadow:var(--shadow);color:#fff}
+.arrow.p{background:var(--preciso)}
+.arrow.q{background:var(--quero)}
+.arrows.hide{visibility:hidden}
+.next{width:130px;height:130px;border-radius:50%;background:var(--gold);color:#fff;font-size:64px;display:none;place-items:center;box-shadow:var(--shadow);padding-left:8px}
+.next.show{display:grid;animation:pop .35s ease-out}
+.endbox{display:none;flex-direction:column;align-items:center;gap:4vh}
+.endbox.show{display:flex;animation:pop .5s ease-out}
+.endbox .big{font-size:clamp(110px,22vh,240px)}
+.again{height:100px;padding:0 36px;border-radius:50px;background:var(--gold);color:#fff;font-size:54px;display:grid;place-items:center;box-shadow:var(--shadow)}
+
+.spark{position:fixed;z-index:60;font-size:44px;pointer-events:none;animation:spark .9s ease-out forwards}
+
+@keyframes pop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes enter{0%{transform:translateY(-30px) scale(.85);opacity:0}100%{transform:none;opacity:1}}
+@keyframes bob{50%{transform:translateY(-10px)}}
+@keyframes breathe{50%{transform:scale(1.015)}}
+@keyframes nudgeL{50%{transform:translateX(-50px) rotate(-4deg)}}
+@keyframes nudgeR{50%{transform:translateX(50px) rotate(4deg)}}
+@keyframes spark{0%{transform:translate(0,0) scale(.4);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1);opacity:0}}
+
+/* plaquinhas para imprimir */
+.printables{display:none}
+@media print{
+  @page{size:A4 landscape;margin:0}
+  body{height:auto;overflow:visible;background:#fff}
+  .screen,.screen.active{display:none!important}
+  .printables{display:flex;width:297mm;height:210mm;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .plate{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10mm;color:#fff;border-right:1mm dashed #fff}
+  .plate.p{background:#1E8E4E}.plate.q{background:#6D3FC8;border:0}
+  .plate .emoji{font-size:90mm}
+  .plate .nm{font-size:22mm;font-weight:900;font-family:"Nunito",sans-serif}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .spark{display:none}
+}
+@media (max-width:760px){
+  body{overflow:auto}
+  .hero{flex-direction:column}
+  .pq{grid-template-columns:1fr 1fr;grid-template-areas:"c c" "p q"}
+  .pq .center{grid-area:c}.zone.p{grid-area:p}.zone.q{grid-area:q}
+}
+</style>
+</head>
+<body>
+
+<section class="screen active" id="start">
+  <div class="hero">
+    <div class="side p"><span class="emoji">❤️</span><span class="nm">PRECISO</span></div>
+    <span class="or emoji">🤔</span>
+    <div class="side q"><span class="emoji">⭐</span><span class="nm">QUERO</span></div>
+  </div>
+  <div class="start-row">
+    <button class="play-btn" id="startBtn" aria-label="Começar">▶</button>
+    <button class="print-btn" id="printBtn"><span class="emoji">🖨️</span>Plaquinhas</button>
+  </div>
+  <div class="keys">Apresentador: <kbd>Espaço</kbd> começar, virar a carta e próxima · <kbd>←</kbd> preciso · <kbd>→</kbd> quero · <kbd>R</kbd> recomeçar · <kbd>Esc</kbd> início</div>
+</section>
+
+<section class="screen" id="game">
+  <div class="top">
+    <button class="round-btn emoji" id="homeBtn" aria-label="Início">🏠</button>
+    <div class="spacer"></div>
+    <div class="progress" id="progress"></div>
+    <div class="spacer"></div>
+    <button class="round-btn emoji" id="restartBtn" aria-label="Recomeçar">🔄</button>
+  </div>
+  <div class="pq">
+    <button class="zone p" id="zoneP" aria-label="Preciso">
+      <div class="check">✓</div>
+      <div class="ic emoji">❤️</div>
+      <div class="nm">PRECISO</div>
+      <div class="pile emoji" id="pileP"></div>
+    </button>
+    <div class="center">
+      <div class="card back" id="card">
+        <div class="big emoji" id="cardEmoji">❓</div>
+        <div class="cap" id="cardName">.</div>
+        <div class="tap-hint emoji">👆</div>
+      </div>
+      <div class="arrows hide" id="arrows">
+        <button class="arrow p emoji" id="btnP" aria-label="Preciso">❤️</button>
+        <button class="arrow q emoji" id="btnQ" aria-label="Quero">⭐</button>
+      </div>
+      <button class="next" id="next" aria-label="Próxima carta">▶</button>
+      <div class="endbox" id="endbox">
+        <div class="big emoji">👏</div>
+        <button class="again emoji" id="againBtn" aria-label="Jogar de novo">🔄</button>
+      </div>
+    </div>
+    <button class="zone q" id="zoneQ" aria-label="Quero">
+      <div class="check">✓</div>
+      <div class="ic emoji">⭐</div>
+      <div class="nm">QUERO</div>
+      <div class="pile emoji" id="pileQ"></div>
+    </button>
+  </div>
+</section>
+
+<div class="printables" aria-hidden="true">
+  <div class="plate p"><span class="emoji">❤️</span><span class="nm">PRECISO</span></div>
+  <div class="plate q"><span class="emoji">⭐</span><span class="nm">QUERO</span></div>
+</div>
+
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const $$ = s => [...document.querySelectorAll(s)];
+
+  const ALL = [
+    {e:'🍚', n:'Comida', t:'p'},
+    {e:'💧', n:'Água', t:'p'},
+    {e:'🏠', n:'Casa', t:'p'},
+    {e:'💊', n:'Remédio', t:'p'},
+    {e:'🧥', n:'Casaco no frio', t:'p'},
+    {e:'🪥', n:'Escova de dentes', t:'p'},
+    {e:'🎮', n:'Videogame', t:'q'},
+    {e:'👟', n:'Tênis novo', t:'q'},
+    {e:'📱', n:'Celular novo', t:'q'},
+    {e:'🍭', n:'Doce', t:'q'},
+    {e:'🧸', n:'Brinquedo', t:'q'},
+    {e:'🎧', n:'Fone novo', t:'q'}
+  ];
+
+  // embaralha sem deixar 3 cartas seguidas do mesmo lado
+  function shuffle(){
+    let a;
+    do {
+      a = ALL.slice();
+      for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; }
+    } while (a.some((x,i) => i > 1 && x.t === a[i-1].t && x.t === a[i-2].t));
+    return a;
+  }
+
+  const card = $('#card'), zoneP = $('#zoneP'), zoneQ = $('#zoneQ');
+  let items = [], idx = 0, phase = 'start';
+
+  function show(id){ $$('.screen').forEach(s => s.classList.toggle('active', s.id === id)); }
+
+  function startGame(){
+    show('game');
+    items = shuffle(); idx = 0;
+    $('#pileP').innerHTML = ''; $('#pileQ').innerHTML = '';
+    $('#progress').innerHTML = items.map(() => '<i></i>').join('');
+    $('#endbox').classList.remove('show');
+    dealCard();
+  }
+  function goHome(){ phase = 'start'; show('start'); }
+
+  function dealCard(){
+    zoneP.classList.remove('hit','ready'); zoneQ.classList.remove('hit','ready');
+    $('#next').classList.remove('show');
+    $('#arrows').classList.add('hide');
+    $$('#progress i').forEach((d,i) => d.classList.toggle('now', i === idx));
+    card.style.transition = 'none'; card.style.transform = ''; card.style.opacity = '1'; card.style.animation = '';
+    card.style.display = 'flex';
+    card.className = 'card back';
+    $('#cardEmoji').textContent = '❓'; $('#cardName').textContent = '.';
+    void card.offsetWidth; card.classList.add('enter');
+    phase = 'hidden';
+  }
+
+  // virar a carta: dá tempo do intérprete preparar a turma
+  function flip(){
+    if (phase !== 'hidden') return;
+    phase = 'flipping';
+    const it = items[idx];
+    card.classList.remove('enter');
+    card.style.transition = 'transform .22s ease-in';
+    card.style.transform = 'scaleX(0)';
+    setTimeout(() => {
+      card.className = 'card front';
+      $('#cardEmoji').textContent = it.e; $('#cardName').textContent = it.n;
+      card.style.transition = 'transform .22s ease-out';
+      card.style.transform = 'scaleX(1)';
+      setTimeout(() => {
+        card.style.transform = '';
+        $('#arrows').classList.remove('hide');
+        zoneP.classList.add('ready'); zoneQ.classList.add('ready');
+        phase = 'ask';
+      }, 230);
+    }, 230);
+  }
+
+  function sparkle(zone){
+    const r = zone.getBoundingClientRect();
+    const cx = r.left + r.width/2, cy = r.top + r.height*0.2;
+    for (let i = 0; i < 7; i++){
+      const s = document.createElement('span');
+      s.className = 'spark emoji'; s.textContent = i % 2 ? '✨' : '⭐';
+      const ang = (Math.PI*2/7)*i, dist = 90 + Math.random()*40;
+      s.style.left = (cx-22)+'px'; s.style.top = (cy-22)+'px';
+      s.style.setProperty('--dx', Math.cos(ang)*dist+'px');
+      s.style.setProperty('--dy', Math.sin(ang)*dist+'px');
+      document.body.appendChild(s);
+      setTimeout(() => s.remove(), 950);
+    }
+  }
+
+  function choose(side){
+    if (phase !== 'ask') return;
+    phase = 'anim';
+    const it = items[idx], right = it.t;
+    zoneP.classList.remove('ready'); zoneQ.classList.remove('ready');
+    $('#arrows').classList.add('hide');
+    const zone = right === 'p' ? zoneP : zoneQ;
+    const pile = right === 'p' ? $('#pileP') : $('#pileQ');
+    const fly = () => {
+      const a = card.getBoundingClientRect(), b = pile.getBoundingClientRect();
+      const n = pile.children.length;
+      const tx = b.left + (b.width/3)*(n%3) + b.width/6;
+      const ty = b.top + 40 + Math.floor(n/3)*70;
+      card.style.transition = 'transform .65s cubic-bezier(.2,.8,.2,1), opacity .65s';
+      card.style.transform = `translate(${tx-(a.left+a.width/2)}px,${ty-(a.top+a.height/2)}px) scale(.2)`;
+      card.style.opacity = '0';
+      setTimeout(() => {
+        const s = document.createElement('span'); s.textContent = it.e; pile.appendChild(s);
+        zone.classList.add('hit');
+        if (side === right) sparkle(zone);
+        const dot = $$('#progress i')[idx]; dot.classList.remove('now'); dot.classList.add(right);
+        card.style.display = 'none';
+        if (idx === items.length - 1){ phase = 'end'; setTimeout(() => $('#endbox').classList.add('show'), 500); }
+        else { phase = 'placed'; $('#next').classList.add('show'); }
+      }, 680);
+    };
+    card.style.transition = 'none'; card.style.transform = '';
+    if (side !== right){
+      // escolha diferente: a carta vai até o lado escolhido e volta para o lugar certo, sem punição
+      card.style.animation = (side === 'p' ? 'nudgeL' : 'nudgeR') + ' .5s ease-in-out';
+      setTimeout(() => { card.style.animation = ''; fly(); }, 520);
+    } else fly();
+  }
+
+  function next(){ if (phase === 'placed'){ idx++; dealCard(); } }
+
+  $('#startBtn').addEventListener('click', startGame);
+  $('#againBtn').addEventListener('click', startGame);
+  $('#restartBtn').addEventListener('click', startGame);
+  $('#homeBtn').addEventListener('click', goHome);
+  $('#printBtn').addEventListener('click', () => window.print());
+  zoneP.addEventListener('click', () => choose('p'));
+  zoneQ.addEventListener('click', () => choose('q'));
+  $('#btnP').addEventListener('click', () => choose('p'));
+  $('#btnQ').addEventListener('click', () => choose('q'));
+  $('#next').addEventListener('click', next);
+
+  // toque vira a carta; depois de virada, dá para arrastar
+  let drag = null, moved = false;
+  card.addEventListener('pointerdown', e => {
+    if (phase === 'hidden'){ flip(); return; }
+    if (phase !== 'ask') return;
+    drag = {x:e.clientX, y:e.clientY}; moved = false; card.setPointerCapture(e.pointerId);
+    card.style.transition = 'none';
+  });
+  card.addEventListener('pointermove', e => {
+    if (!drag) return;
+    const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+    if (Math.abs(dx) > 5) moved = true;
+    card.style.transform = `translate(${dx}px,${dy}px) rotate(${dx/25}deg)`;
+  });
+  card.addEventListener('pointerup', e => {
+    if (!drag) return;
+    const dx = e.clientX - drag.x; drag = null;
+    if (dx < -110) choose('p');
+    else if (dx > 110) choose('q');
+    else { card.style.transition = 'transform .3s'; card.style.transform = ''; }
+  });
+
+  document.addEventListener('keydown', e => {
+    const k = e.key, sp = (k === ' ' || k === 'Enter');
+    if (k === 'Escape'){ goHome(); return; }
+    if (phase === 'start'){ if (sp){ e.preventDefault(); startGame(); } return; }
+    if (k === 'r' || k === 'R'){ startGame(); return; }
+    if (sp){
+      e.preventDefault();
+      if (phase === 'hidden') flip();
+      else if (phase === 'placed') next();
+      else if (phase === 'end') startGame();
+    }
+    if (phase === 'ask' && k === 'ArrowLeft'){ e.preventDefault(); choose('p'); }
+    if (phase === 'ask' && k === 'ArrowRight'){ e.preventDefault(); choose('q'); }
+  });
+})();
+</script>
+</body>
+</html>

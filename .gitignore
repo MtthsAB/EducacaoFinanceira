@@ -1,0 +1,43 @@
+# Dependências (recriadas pelo start.bat / npm install)
+node_modules/
+.npm/
+.pnpm-store/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Testes e artefatos locais
+playwright-report/
+test-results/
+.playwright/
+out/
+dist/
+build/
+*.pdf.tmp
+
+# Sistema operacional
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+._*
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Variáveis de ambiente
+.env
+.env.*
+!.env.example
+
+# A pasta site/ é a entrega: ela DEVE ir para o repositório.
+# Não adicione "site/" aqui.

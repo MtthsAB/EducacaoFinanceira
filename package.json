@@ -1,0 +1,13 @@
+{
+  "name": "preciso-ou-quero",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Jogo de educacao financeira - site estatico em site/",
+  "scripts": {
+    "start": "node serve.js site 8080",
+    "start:serve": "serve site -l 8080"
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}

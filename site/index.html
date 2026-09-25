@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Preciso ou quero?</title>
+<meta name="description" content="Jogo de educação financeira: separar o que a gente precisa do que a gente quer.">
+<meta name="theme-color" content="#E6F2FB" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#10223A" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="icon" href="./icons/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="preload" href="./assets/fonts/nunito-900.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="./css/style.css">
+<script src="./js/app.js" defer></script>
+</head>
+<body>
+
+<section class="screen active" id="start">
+  <div class="hero">
+    <div class="side p">
+      <img class="emoji" src="./assets/emoji/coracao.svg" alt="Coração">
+      <span class="nm">PRECISO</span>
+    </div>
+    <img class="or emoji" src="./assets/emoji/pensando.svg" alt="Rosto pensativo">
+    <div class="side q">
+      <img class="emoji" src="./assets/emoji/estrela.svg" alt="Estrela">
+      <span class="nm">QUERO</span>
+    </div>
+  </div>
+  <div class="start-row">
+    <button class="play-btn" id="startBtn" aria-label="Começar">
+      <svg class="glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5l13.5 8.5L7 20.5z"/></svg>
+    </button>
+    <button class="print-btn" id="printBtn">
+      <img class="emoji" src="./assets/emoji/impressora.svg" alt="Impressora">Plaquinhas
+    </button>
+  </div>
+  <div class="keys">Apresentador: <kbd>Espaço</kbd> começar, virar a carta e próxima · <kbd>←</kbd> preciso · <kbd>→</kbd> quero · <kbd>F</kbd> tela cheia · <kbd>R</kbd> recomeçar · <kbd>Esc</kbd> início</div>
+  <footer class="credits">
+    Figuras: Twemoji por jdecked e colaboradores, licença CC-BY 4.0. Fonte: Nunito, licença SIL OFL 1.1. Detalhes em CREDITS.md.
+  </footer>
+</section>
+
+<section class="screen" id="game">
+  <div class="top">
+    <div class="grp left">
+      <button class="round-btn" id="homeBtn" aria-label="Início">
+        <img class="emoji" src="./assets/emoji/casa.svg" alt="">
+      </button>
+    </div>
+    <div class="progress" id="progress"></div>
+    <div class="grp right">
+      <button class="round-btn" id="fsBtn" aria-label="Entrar em tela cheia">
+        <svg class="glyph fs-in" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9V3h6v2H5v4H3zm12-6h6v6h-2V5h-4V3zM3 15h2v4h4v2H3v-6zm16 0h2v6h-6v-2h4v-4z"/></svg>
+        <svg class="glyph fs-out" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h2v6H5V7h4V3zm4 0h2v4h4v2h-6V3zM5 15h6v6H9v-4H5v-2zm8 0h6v2h-4v4h-2v-6z"/></svg>
+      </button>
+      <button class="round-btn" id="restartBtn" aria-label="Recomeçar">
+        <img class="emoji" src="./assets/emoji/recomecar.svg" alt="">
+      </button>
+    </div>
+  </div>
+  <div class="pq">
+    <button class="zone p" id="zoneP" aria-label="Preciso">
+      <div class="check"><svg class="glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.6 19.2L2.4 12l2.8-2.8 4.4 4.4L18.8 4.8l2.8 2.8z"/></svg></div>
+      <img class="ic emoji" src="./assets/emoji/coracao.svg" alt="">
+      <div class="nm">PRECISO</div>
+      <div class="pile" id="pileP"></div>
+    </button>
+    <div class="center">
+      <div class="card back" id="card">
+        <img class="big emoji" id="cardEmoji" src="./assets/emoji/interrogacao.svg" alt="Carta virada">
+        <div class="cap" id="cardName">.</div>
+        <img class="tap-hint emoji" src="./assets/emoji/mao-toque.svg" alt="Toque na carta">
+      </div>
+      <div class="arrows hide" id="arrows">
+        <button class="arrow p" id="btnP" aria-label="Preciso">
+          <img class="emoji" src="./assets/emoji/coracao.svg" alt="">
+        </button>
+        <button class="arrow q" id="btnQ" aria-label="Quero">
+          <img class="emoji" src="./assets/emoji/estrela.svg" alt="">
+        </button>
+      </div>
+      <button class="next" id="next" aria-label="Próxima carta">
+        <svg class="glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5l13.5 8.5L7 20.5z"/></svg>
+      </button>
+      <div class="endbox" id="endbox">
+        <img class="big emoji" src="./assets/emoji/aplausos.svg" alt="Mãos batendo palmas">
+        <button class="again" id="againBtn" aria-label="Jogar de novo">
+          <img class="emoji" src="./assets/emoji/recomecar.svg" alt="">
+        </button>
+      </div>
+    </div>
+    <button class="zone q" id="zoneQ" aria-label="Quero">
+      <div class="check"><svg class="glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.6 19.2L2.4 12l2.8-2.8 4.4 4.4L18.8 4.8l2.8 2.8z"/></svg></div>
+      <img class="ic emoji" src="./assets/emoji/estrela.svg" alt="">
+      <div class="nm">QUERO</div>
+      <div class="pile" id="pileQ"></div>
+    </button>
+  </div>
+</section>
+
+<div class="printables" aria-hidden="true">
+  <div class="plate p"><img class="emoji" src="./assets/emoji/coracao.svg" alt=""><span class="nm">PRECISO</span></div>
+  <div class="plate q"><img class="emoji" src="./assets/emoji/estrela.svg" alt=""><span class="nm">QUERO</span></div>
+</div>
+
+</body>
+</html>
